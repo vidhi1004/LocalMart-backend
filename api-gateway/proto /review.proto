@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package review;
+
+service ReviewService {
+    rpc createReview(CreateReviewDto) returns (Review);
+    rpc getAllReviews(Empty) returns (Reviews);
+    rpc getReviewById(GetReviewByIdDto) returns (Review);
+    rpc getReviewsByProductId(GetReviewsByProductIdDto) returns (Reviews);
+    rpc updateReview(UpdateReviewDto) returns (Review);
+    rpc deleteReview(DeleteReviewDto) returns (Empty);
+}
+
+message Empty {}
+
+message CreateReviewDto {
+    int32 productId = 1;
+    int32 rating = 2;
+    string comment = 3;
+    int32 userId = 4;
+    int32 orderId = 5;
+}
+
+message UpdateReviewDto {
+    int32 id = 1;
+    int32 rating = 2;
+    string comment = 3;
+}
+
+message DeleteReviewDto {
+    int32 id = 1;
+    int32 userId = 2;
+}
+
+message GetReviewByIdDto {
+    int32 id = 1;
+}
+
+message GetReviewsByProductIdDto {
+    int32 productId = 1;
+}
+
+message Review {
+    int32 id = 1;
+    int32 userId = 2;
+    int32 productId = 3;
+    int32 rating = 4;
+    string comment = 5;
+}
+
+message Reviews {
+    repeated Review reviews = 1;
+}
