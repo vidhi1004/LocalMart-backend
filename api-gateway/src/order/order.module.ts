@@ -4,6 +4,7 @@ import { OrderService } from './order.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import * as grpc from '@grpc/grpc-js';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { ConfigModule } from '@nestjs/config';
           url: process.env.ORDER_SERVICE_URL ?? 'localhost:50053',
           package: 'order',
           protoPath: join(process.cwd(), '/proto/order.proto'),
+          credentials:
+            process.env.NODE_ENV === 'production'
+              ? grpc.credentials.createSsl()
+              : grpc.credentials.createInsecure(),
         },
       },
     ]),

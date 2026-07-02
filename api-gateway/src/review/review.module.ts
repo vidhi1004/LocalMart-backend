@@ -4,6 +4,7 @@ import { ReviewController } from './review.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import * as grpc from '@grpc/grpc-js';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { ConfigModule } from '@nestjs/config';
           url: process.env.REVIEW_SERVICE_URL ?? 'localhost:50055',
           package: 'review',
           protoPath: join(process.cwd(), '/proto/review.proto'),
+          credentials:
+            process.env.NODE_ENV === 'production'
+              ? grpc.credentials.createSsl()
+              : grpc.credentials.createInsecure(),
         },
       },
     ]),

@@ -4,6 +4,7 @@ import { PaymentController } from './payment.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import * as grpc from '@grpc/grpc-js';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { ConfigModule } from '@nestjs/config';
           url: process.env.PAYMENT_SERVICE_URL ?? 'localhost:50054',
           package: 'payment',
           protoPath: join(process.cwd(), '/proto/payment.proto'),
+          credentials:
+            process.env.NODE_ENV === 'production'
+              ? grpc.credentials.createSsl()
+              : grpc.credentials.createInsecure(),
         },
       },
     ]),

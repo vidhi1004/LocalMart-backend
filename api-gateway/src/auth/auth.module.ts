@@ -4,6 +4,7 @@ import { join } from 'path/win32';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ConfigModule } from '@nestjs/config';
+import * as grpc from '@grpc/grpc-js';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { ConfigModule } from '@nestjs/config';
           url: process.env.AUTH_SERVICE_URL ?? 'localhost:50051',
           package: 'auth',
           protoPath: join(process.cwd(), '/proto/auth.proto'),
+          credentials:
+            process.env.NODE_ENV === 'production'
+              ? grpc.credentials.createSsl()
+              : grpc.credentials.createInsecure(),
         },
       },
     ]),
