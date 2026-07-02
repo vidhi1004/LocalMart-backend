@@ -3,7 +3,16 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
-  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
+
+  app.enableCors({
+    origin: [
+      'https://localmart-22dfbit5m-vidhis-projects-ba32b7b5.vercel.app',
+      'http://localhost:3000',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
