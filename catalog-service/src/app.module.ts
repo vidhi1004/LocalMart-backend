@@ -34,9 +34,13 @@ import { ProductImageModule } from './product-image/product-image.module';
           ? configService.get('DB_NAME')
           : undefined,
 
-        entities: entities,
-        synchronize: configService.get('NODE_ENV') !== 'production',
+       
+        schema: 'catalog_service', 
 
+        entities: entities,
+        synchronize: true,
+
+       
         ssl:
           configService.get('NODE_ENV') === 'production'
             ? { rejectUnauthorized: false }
