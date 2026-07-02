@@ -24,13 +24,16 @@ async function bootstrap() {
     `Auth Microservice is securely running on port ${process.env.PORT ?? 50051}`,
   );
 }
-
-const renderPort = process.env.PORT || 3001; // Render will inject its dynamic port here
-  http.createServer((req, res) => {
+const healthCheckPort = 3001;
+http
+  .createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Healthy');
-  }).listen(renderPort, '0.0.0.0', () => {
-    console.log(`Render dummy health check listening on port ${renderPort}`);
+  })
+  .listen(healthCheckPort, '0.0.0.0', () => {
+    console.log(
+      `Render dummy HTTP health check listening on port ${healthCheckPort}`,
+    );
   });
-}
+
 bootstrap();
