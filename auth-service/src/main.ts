@@ -6,6 +6,7 @@ import { join } from 'path';
 import * as http from 'http';
 
 async function bootstrap() {
+  // 1. Keep your working gRPC Microservice configuration exactly as it is:
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
@@ -23,5 +24,15 @@ async function bootstrap() {
   console.log(
     `Auth Microservice is securely running on port ${process.env.PORT ?? 50051}`,
   );
+
+  
+  const healthPort = process.env.HEALTH_PORT || 3002; 
+
+  http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Healthy');
+  }).listen(Number(healthPort), '0.0.0.0', () => {
+    console.log(`Render dummy HTTP health check listening safely on port ${healthPort}`);
+  });
 }
 bootstrap();
