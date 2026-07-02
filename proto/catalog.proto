@@ -1,0 +1,227 @@
+syntax = "proto3";
+
+package catalog;
+
+service CatalogService {
+    rpc getAllProducts(Empty) returns (Products);
+    rpc getProductById(GetProductByIdDto) returns (Product);
+    rpc createProduct(CreateProductDto) returns (Product);
+    rpc updateProduct(UpdateProductDto) returns (Product);
+    rpc deleteProduct(DeleteProductDto) returns (Empty);
+
+    rpc createCategory(CreateCategoryDto) returns (Category);
+    rpc getAllCategories(Empty) returns (Categories);
+    rpc getCategoryById(GetCategoryByIdDto) returns (Category);
+    rpc updateCategory(UpdateCategoryDto) returns (Category);
+    rpc deleteCategory(DeleteCategoryDto) returns (Empty);
+
+    rpc createProductVariant(CreateProductVariantDto) returns (ProductVariant);
+    rpc getAllProductVariants(Empty) returns (ProductVariants);
+    rpc getProductVariantById(GetProductVariantByIdDto) returns (ProductVariant);
+    rpc getProductVariantByVariantId(GetProductVariantByIdDto) returns (ProductVariant);
+    rpc updateProductVariant(UpdateProductVariantDto) returns (ProductVariant);
+    rpc deleteProductVariant(DeleteProductVariantDto) returns (Empty);
+
+
+    rpc createProductImage(CreateProductImageDto) returns (ProductImage);
+    rpc getAllProductImages(Empty) returns (ProductImages);
+    rpc getProductImageById(GetProductImageByIdDto) returns (ProductImage);
+    rpc updateProductImage(UpdateProductImageDto) returns (ProductImage);
+    rpc deleteProductImage(DeleteProductImageDto) returns (Empty);
+
+    rpc createInventory(CreateInventoryDto) returns (Inventory);
+    rpc getAllInventories(Empty) returns (Inventories);
+    rpc getInventoryById(GetInventoryByIdDto) returns (Inventory);
+    rpc updateInventory(UpdateInventoryDto) returns (Inventory);
+    rpc deleteInventory(DeleteInventoryDto) returns (Empty);
+}
+
+ enum Size {
+      XS = 0;
+      S=1;
+      M=2;
+      L=3;
+      XL=4;
+      XXL=5;
+    }
+
+
+message CreateCategoryDto {
+    string name = 1;
+    string description = 2;
+}
+
+message Category {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+}
+message Empty {
+  
+}
+message Categories {
+    repeated Category categories = 1;
+}
+
+message GetCategoryByIdDto {
+    int32 id = 1;
+}
+
+message UpdateCategoryDto {
+    int32 id = 1;
+    string name = 2;
+    string description = 3; 
+    bool isActive = 4;
+}
+
+message DeleteCategoryDto {
+    int32 id = 1;
+}
+
+message CreateInventoryDto {
+    int32 productVariantId = 1;
+    int32 stock = 2;
+}
+
+message Inventory {
+    int32 id  = 1;
+    int32 stock = 2;
+    int32 reservedStock = 3;
+    int32 productVariantId = 4;
+}
+
+message Inventories{
+    repeated Inventory inventories = 1;
+}
+
+message GetInventoryByIdDto{
+    int32 id = 1;
+}
+
+message UpdateInventoryDto {
+    int32 id = 1;
+    int32 stock = 2;
+    int32 reservedStock = 3;
+}
+
+message DeleteInventoryDto {
+    int32 id = 1;
+}
+
+message CreateProductDto{
+    string name = 1;
+    string description = 2;
+    string brand = 3;
+    int32 categoryId = 4;
+}
+message Product {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    string brand = 4;
+    bool isActive = 5;
+    Category category = 6;
+    repeated ProductVariant variants = 7;
+    repeated ProductImage images = 8;    
+}
+
+message UpdateProductDto{
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    string brand = 4;
+    int32 categoryId = 5;
+    bool isActive = 6;
+}
+
+
+message DeleteProductDto {
+    int32 id = 1;
+}
+
+message Products {
+    repeated Product products = 1;
+  
+}
+
+message  GetProductByIdDto {
+    int32 id = 1;
+}
+
+
+message CreateProductVariantDto {
+    int32 productId= 1;
+    string sku = 2;
+    Size size = 3;
+    double price =4;
+    string color = 5;
+}
+
+message ProductVariant {
+    int32 id = 1;
+    string sku = 2;
+    Size size = 3;
+    double price =4;
+    string color = 5;
+    bool isActive = 6;
+    Inventory inventory = 7;
+}
+
+message ProductVariants {
+    repeated ProductVariant productVariants = 1;
+}
+
+message GetProductVariantByIdDto {
+    int32 id = 1;
+}
+
+message UpdateProductVariantDto {
+    int32 id  =1;
+     int32 productId= 2;
+    string sku = 3;
+    Size size = 4;
+    double price =5;
+    string color = 6;
+    bool isActive = 7;
+  
+}
+message DeleteProductVariantDto {
+    int32 id = 1;
+}
+
+message CreateProductImageDto {
+    int32 productId = 1;
+    string imageUrl =2 ;
+    bool isPrimary = 3;
+    int32 displayOrder = 4;
+}
+
+message  ProductImage {
+  int32 id = 1;
+  string imageUrl = 2;
+  bool isPrimary = 3;
+  int32 displayOrder = 4;  
+}
+
+message ProductImages {
+    repeated ProductImage productImages = 1;
+}
+
+message GetProductImageByIdDto {
+    int32 id = 1;
+}
+
+message UpdateProductImageDto {
+    int32 id = 1;
+    int32 productId = 2;
+    string imageUrl =3;
+    bool isPrimary = 4;
+    int32 displayOrder = 5;
+}
+
+message DeleteProductImageDto {
+    int32 id = 1;
+}
+
+
+

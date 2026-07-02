@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Test Razorpay Integration</title>
+  </head>
+  <body>
+    <button id="pay-btn">Pay Now</button>
+
+    <script src="https://razorpay.com"></script>
+    <script>
+      document.getElementById('pay-btn').onclick = async function () {
+        // 1. Hit your real NestJS backend to create a genuine Razorpay Order
+        const response = await fetch('http://localhost:3003/payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: 25 }), // Match your Order schema
+        });
+        const data = await response.json();
+
+        // 2. Open the official Razorpay UI overlay using your live backend data
+        const options = {
+          key: data.razorpayApiKey,
+          amount: data.amount * 100,
+          currency: 'INR',
+          name: 'My NestJS Store',
+          order_id: data.razorpayOrderId, // The real order ID from checkpoint 1
+          handler: async function (handlerResponse) {
+            // 3. This triggers automatically upon successful checkout payment
+            // It returns the real signatures directly from Razorpay's UI
+            const verifyResponse = await fetch(
+              `http://localhost:3003/payment/${data.id}`,
+              {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  paymentstatus: 'SUCCESS',
+                  razorpayPaymentId: handlerResponse.razorpay_payment_id,
+                  razorpaySignature: handlerResponse.razorpay_signature,
+                  paymentMode: 'CARD',
+                }),
+              },
+            );
+            const finalResult = await verifyResponse.json();
+            alert('Payment Verified & Saved: ' + JSON.stringify(finalResult));
+          },
+        };
+        const rzp = new Razorpay(options);
+        rzp.open();
+      };
+    </script>
+  </body>
+</html>

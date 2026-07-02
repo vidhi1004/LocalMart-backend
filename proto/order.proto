@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package order;
+
+service OrderService {
+    rpc createOrder(CreateOrderDto) returns (Order);
+    rpc getAllOrders(Empty) returns (Orders);
+    rpc getOrderById(GetOrderByIdDto) returns (Order);
+    rpc updateOrder(UpdateOrderDto) returns (Order);
+    rpc deleteOrder(DeleteOrderDto) returns (Empty);
+    rpc getMyOrder(GetMyOrderDto) returns (Orders);
+    rpc getOrderByIdAdmin(GetOrderByIdAdminDto) returns (Order);
+}
+
+enum Status {
+    PENDING = 0;
+    CONFIRMED = 1;
+    PAID = 2;
+    SHIPPED = 3;
+    DELIVERED = 4;
+    CANCELLED = 5;
+}
+
+message GetOrderByIdAdminDto {
+    int32 id = 1;
+  
+}
+message GetMyOrderDto{
+    int32 id =1;
+}
+message Empty {}
+
+message Item {
+    int32 productId = 1;
+    int32 productVariantId = 2;
+    int32 quantity = 3;
+    int32 unitPrice =4;
+    int32 subtotal =5;
+    string productName =6;
+    string sku=7;
+}
+
+
+message CreateOrderDto {
+    int32 userId = 1;
+    string email = 2;
+    repeated Item items = 3;
+    string shippingAddress = 4;
+    string shippingCity = 5;
+    string shippingState = 6;
+    string shippingPincode = 7;
+    string shippingPhone = 8;
+}
+
+message GetOrderByIdDto {
+    int32 id = 1;
+    int32 userId =2;
+}
+
+message Order {
+    int32 id = 1;
+    int32 userId = 2;
+    Status status = 3;
+    double totalAmount = 4;
+    repeated Item items = 5;
+    string shippingAddress = 6;
+    string shippingCity = 7;
+    string shippingState = 8;
+    string shippingPincode = 9;
+    string shippingPhone = 10;
+    string awbCode = 11;
+    string courierName = 12;
+    string shipmentId = 13;
+    string createdAt=14;
+    string updatedAt=15;
+}
+
+message Orders {
+    repeated Order orders = 1;
+}
+
+message UpdateOrderDto {
+    int32 id = 1;
+    Status status = 2;
+}
+
+message DeleteOrderDto {
+    int32 id = 1;
+     int32 userId = 2;
+}

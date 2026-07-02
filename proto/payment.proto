@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package payment;
+
+service PaymentService {
+    rpc createPayment(CreatePaymentDto) returns (Payment);
+    rpc getAllPayments(Empty) returns (Payments);
+    rpc getPaymentById(GetPaymentByIdDto) returns (Payment);
+    rpc updatePayment(UpdatePaymentDto) returns (Payment);
+    // rpc deletePayment(DeletePaymentDto) returns (Empty);
+}
+
+
+message Empty {}
+
+message CreatePaymentDto {
+    int32 orderId = 1;
+    int32 userId = 2;
+}
+
+message UpdatePaymentDto {
+    int32 id = 1;
+    string paymentstatus = 2;
+    string transactionId = 3;
+    string paymentMode = 4;
+    string razorpayPaymentId = 5;
+    string razorpaySignature = 6;
+    int32 userId = 7;
+    string email = 8;
+}
+
+message DeletePaymentDto {
+    int32 id = 1;
+    int32 userId = 2;
+}
+
+message GetPaymentByIdDto {
+    int32 id = 1;
+    int32 userId = 2;
+
+}
+
+message Payment {
+    int32 id = 1;
+    int32 userId = 2;
+    int32 orderId = 3;
+    string paymentstatus = 4;
+    string transactionId = 5;
+    string paymentMode = 6;
+    double amount = 7;
+    string razorpayPaymentId = 8;
+    string razorpaySignature = 9;
+    string razorpayOrderId = 10;
+}
+
+message Payments {
+    repeated Payment payments = 1;
+}

@@ -1,0 +1,15 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY api-gateway/package*.json ./
+
+RUN npm install
+
+COPY api-gateway .
+
+COPY proto ./proto
+
+# RUN npm run build
+# CMD ["node","dist/main.js"]
+CMD ["npm","run","start:dev"]

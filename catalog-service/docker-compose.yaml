@@ -1,0 +1,38 @@
+version: '3.8'
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+services:
+  catalog-db:
+    image: postgres:15-alpine
+    container_name: catalog-postgres
+    environment:
+      POSTGRES_USER: ${DB_USERNAME} # Pulls from your .env file
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - catalog-db-data:/var/lib/postgresql/data
+    networks:
+      - ecommerce-network
+
+  catalog-service:
+    container_name: ecommerce-catalog
+    build: . # Since compose is inside /catalog-service
+    ports:
+      - "3001:3001" # Change to whatever port your app runs on
+    env_file:
+      - ./.env # Points to the local .env file
+    environment:
+      - DB_HOST=catalog-db # Overrides localhost to target the DB container
+    depends_on:
+      - catalog-db
+    networks:
+      - ecommerce-network
+    restart: always
+
+volumes:
+  catalog-db-data: # Persists your data so it isn't wiped when containers stop
