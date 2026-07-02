@@ -24,16 +24,4 @@ async function bootstrap() {
     `Auth Microservice is securely running on port ${process.env.PORT ?? 50051}`,
   );
 }
-const healthCheckPort = 3001;
-http
-  .createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Healthy');
-  })
-  .listen(healthCheckPort, '0.0.0.0', () => {
-    console.log(
-      `Render dummy HTTP health check listening on port ${healthCheckPort}`,
-    );
-  });
-
 bootstrap();
