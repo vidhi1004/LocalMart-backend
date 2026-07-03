@@ -34,6 +34,7 @@ import { HttpModule } from '@nestjs/axios';
           ? configService.get('DB_NAME')
           : undefined,
 
+        schema: 'order-service',
         entities: entities,
         synchronize: configService.get('NODE_ENV') !== 'production',
 

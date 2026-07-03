@@ -46,7 +46,7 @@ import { PaymentGrpcController } from './app.grpc.controller';
         database: !configService.get('DATABASE_URL')
           ? configService.get('DB_NAME')
           : undefined,
-
+        schema: 'payment_service',
         entities: entities,
         synchronize: true,
 

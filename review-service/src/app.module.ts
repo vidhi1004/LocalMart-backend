@@ -31,10 +31,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           ? configService.get('DB_NAME')
           : undefined,
 
+        schema: 'review_service',
         entities: entities,
         synchronize: configService.get('NODE_ENV') !== 'production',
 
-        
         ssl:
           configService.get('NODE_ENV') === 'production'
             ? { rejectUnauthorized: false }

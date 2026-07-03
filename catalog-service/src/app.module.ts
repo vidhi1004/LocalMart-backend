@@ -34,6 +34,8 @@ import { ProductImageModule } from './product-image/product-image.module';
           ? configService.get('DB_NAME')
           : undefined,
 
+        schema: 'catalog_service',
+
         entities: entities,
         synchronize: true,
 

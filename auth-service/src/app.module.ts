@@ -32,6 +32,8 @@ import { AuthGrpcController } from './auth.grpc.controller';
           ? configService.get('DB_NAME')
           : undefined,
 
+        schema: 'auth_service',
+
         entities: entities,
         synchronize: true,
 
