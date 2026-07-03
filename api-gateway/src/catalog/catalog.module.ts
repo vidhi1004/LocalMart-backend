@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { join } from 'path/win32';
+import { join } from 'path';
 import { CatalogService } from './catalog.service';
 import { CatalogController } from './catalog.controller';
 import { ConfigModule } from '@nestjs/config';
