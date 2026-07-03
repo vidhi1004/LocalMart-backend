@@ -17,10 +17,7 @@ import * as grpc from '@grpc/grpc-js';
           url: process.env.AUTH_SERVICE_URL ?? 'localhost:50051',
           package: 'auth',
           protoPath: join(process.cwd(), '/proto/auth.proto'),
-          credentials:
-            process.env.NODE_ENV === 'production'
-              ? grpc.credentials.createSsl()
-              : grpc.credentials.createInsecure(),
+          credentials: grpc.credentials.createInsecure(),
         },
       },
     ]),

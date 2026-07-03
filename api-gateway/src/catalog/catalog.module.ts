@@ -4,7 +4,7 @@ import { join } from 'path/win32';
 import { CatalogService } from './catalog.service';
 import { CatalogController } from './catalog.controller';
 import { ConfigModule } from '@nestjs/config';
-import  * as grpc from '@grpc/grpc-js'
+import * as grpc from '@grpc/grpc-js';
 
 @Module({
   imports: [
@@ -17,10 +17,7 @@ import  * as grpc from '@grpc/grpc-js'
           url: process.env.CATALOG_SERVICE_URL ?? 'localhost:50052',
           package: 'catalog',
           protoPath: join(process.cwd(), '/proto/catalog.proto'),
-          credentials:
-            process.env.NODE_ENV === 'production'
-              ? grpc.credentials.createSsl()
-              : grpc.credentials.createInsecure(),
+          credentials: grpc.credentials.createInsecure(),
         },
       },
     ]),

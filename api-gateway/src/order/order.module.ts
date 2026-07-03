@@ -17,10 +17,7 @@ import * as grpc from '@grpc/grpc-js';
           url: process.env.ORDER_SERVICE_URL ?? 'localhost:50053',
           package: 'order',
           protoPath: join(process.cwd(), '/proto/order.proto'),
-          credentials:
-            process.env.NODE_ENV === 'production'
-              ? grpc.credentials.createSsl()
-              : grpc.credentials.createInsecure(),
+          credentials: grpc.credentials.createInsecure(),
         },
       },
     ]),

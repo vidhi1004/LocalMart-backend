@@ -17,10 +17,7 @@ import * as grpc from '@grpc/grpc-js';
           url: process.env.PAYMENT_SERVICE_URL ?? 'localhost:50054',
           package: 'payment',
           protoPath: join(process.cwd(), '/proto/payment.proto'),
-          credentials:
-            process.env.NODE_ENV === 'production'
-              ? grpc.credentials.createSsl()
-              : grpc.credentials.createInsecure(),
+          credentials: grpc.credentials.createInsecure(),
         },
       },
     ]),

@@ -17,10 +17,7 @@ import * as grpc from '@grpc/grpc-js';
           url: process.env.REVIEW_SERVICE_URL ?? 'localhost:50055',
           package: 'review',
           protoPath: join(process.cwd(), '/proto/review.proto'),
-          credentials:
-            process.env.NODE_ENV === 'production'
-              ? grpc.credentials.createSsl()
-              : grpc.credentials.createInsecure(),
+          credentials: grpc.credentials.createInsecure(),
         },
       },
     ]),
