@@ -4,14 +4,26 @@ import { OrderController } from './order.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { OrderItem } from './entities/orderItem.entity';
-import { HttpModule } from '@nestjs/axios';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { INVENTORY_CLIENT, NOTIFICATION_CLIENT } from 'src/constants';
+import { join } from 'path';
+import * as grpc from '@grpc/grpc-js';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, OrderItem]),
-    HttpModule,
+    ClientsModule.register([
+      {
+        name: 'CATALOG_PACKAGE',
+        transport: Transport.GRPC,
+        options: {
+          url: process.env.CATALOG_SERVICE_URL ?? 'localhost:50052',
+          package: 'catalog',
+          protoPath: join(process.cwd(), '/proto/catalog.proto'),
+          credentials: grpc.credentials.createInsecure(),
+        },
+      },
+    ]),
     ClientsModule.register([
       {
         name: NOTIFICATION_CLIENT,

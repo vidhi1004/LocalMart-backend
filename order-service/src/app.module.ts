@@ -8,10 +8,13 @@ import { entities } from './order/entities';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { NOTIFICATION_CLIENT } from './constants';
 import { HttpModule } from '@nestjs/axios';
+import { join } from 'path';
+
 
 @Module({
   imports: [
-    HttpModule,
+    ConfigModule,
+   
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

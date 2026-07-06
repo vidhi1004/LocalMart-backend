@@ -16,20 +16,29 @@ import { HttpService } from '@nestjs/axios';
 import { Status as dbStatus } from '../enum/status.enum';
 import { firstValueFrom } from 'rxjs';
 import { INVENTORY_CLIENT, NOTIFICATION_CLIENT } from 'src/constants';
-import { ClientProxy } from '@nestjs/microservices';
+import type { ClientGrpc, ClientProxy } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { mapGrpcStatus } from './mapper';
 import { Status as GrpcStatus } from '../order';
 import { mapDbStatus } from './reversemapper';
+import { CATALOG_SERVICE_NAME, CatalogServiceClient } from 'src/catalog';
 
 @Injectable()
 export class OrderService {
+  private catalogService!: CatalogServiceClient;
+
+  onModuleInit() {
+    this.catalogService =
+      this.catalogClient.getService<CatalogServiceClient>(CATALOG_SERVICE_NAME);
+  }
   constructor(
     @InjectRepository(Order)
     private readonly orderRepo: Repository<Order>,
     @InjectRepository(OrderItem)
     private readonly orderItemRepo: Repository<OrderItem>,
     private readonly httpService: HttpService,
+    @Inject('CATALOG_PACKAGE')
+    private readonly catalogClient: ClientGrpc,
     @Inject(NOTIFICATION_CLIENT)
     private readonly notificationClinet: ClientProxy,
     @Inject(INVENTORY_CLIENT)
@@ -38,24 +47,27 @@ export class OrderService {
   ) {}
 
   private async getProduct(id: number) {
-    const product = await firstValueFrom(
-      this.httpService.get(`http://api-gateway:3000/catalog/products/${id}`),
+    return await firstValueFrom(
+      this.catalogService.getProductById({
+        id,
+      }),
     );
-    return product.data;
   }
 
   private async getProductVariant(id: number) {
-    const productVariant = await firstValueFrom(
-      this.httpService.get(`http://api-gateway:3000/catalog/variants/id/${id}`),
+    return await firstValueFrom(
+      this.catalogService.getProductVariantByVariantId({
+        id,
+      }),
     );
-    return productVariant.data;
   }
 
   private async getInventory(id: number) {
-    const inventory = await firstValueFrom(
-      this.httpService.get(`http://api-gateway:3000/catalog/inventories/${id}`),
+    return await firstValueFrom(
+      this.catalogService.getInventoryById({
+        id,
+      }),
     );
-    return inventory.data;
   }
 
   private async getShiprocketToken() {
@@ -108,7 +120,7 @@ export class OrderService {
         name: item.productName,
         sku: item.sku,
         units: item.quantity,
-        selling_price: Number(item.unitPrice), // Fixed key mapping name
+        selling_price: Number(item.unitPrice),
       })),
       payment_method: 'Prepaid',
       sub_total: Number(order.totalAmount),
